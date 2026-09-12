@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TiyanPure — Download Aplikasi &amp; APK Android Gratis</title>
+<meta name="description" content="TiyanPure adalah toko aplikasi Android: cari, temukan, dan unduh APK/XAPK aplikasi & game populer dengan cepat dan aman.">
+<meta name="keywords" content="TiyanPure, download APK, unduh aplikasi android, XAPK, toko aplikasi">
+<meta name="author" content="TiyanPure">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://tiyanpure.vercel.app/">
+<meta name="theme-color" content="#0b1220">
+
+<!-- ===== SEO: Social Share (logo ikut tampil saat link di-share) ===== -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="TiyanPure">
+<meta property="og:title" content="TiyanPure — Download Aplikasi & APK Android Gratis">
+<meta property="og:description" content="Cari, temukan, dan unduh APK/XAPK aplikasi & game Android populer. Cepat, gratis, dan bisa di-install sebagai aplikasi.">
+<meta property="og:url" content="https://tiyanpure.vercel.app/">
+<meta property="og:image" content="https://tiyanpure.vercel.app/assets/icons/og-cover.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Logo TiyanPure">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="TiyanPure — Download Aplikasi & APK Android Gratis">
+<meta name="twitter:description" content="Cari, temukan, dan unduh APK/XAPK aplikasi & game Android populer.">
+<meta name="twitter:image" content="https://tiyanpure.vercel.app/assets/icons/og-cover.jpg">
+
+<!-- ===== Icon lokal (anti-expired, tidak tergantung link luar) ===== -->
+<link rel="icon" type="image/x-icon" href="/assets/icons/favicon.ico">
+<link rel="icon" type="image/png" sizes="48x48" href="/assets/icons/icon-48x48.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/assets/icons/icon-192x192.png">
+<link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon.png">
+
+<!-- ===== PWA ===== -->
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="TiyanPure">
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebSite","name":"TiyanPure",
+"url":"https://tiyanpure.vercel.app/",
+"potentialAction":{"@type":"SearchAction","target":"https://tiyanpure.vercel.app/search.html?q={query}","query-input":"required name=query"}}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Organization","name":"TiyanPure",
+"url":"https://tiyanpure.vercel.app/","logo":"https://tiyanpure.vercel.app/assets/icons/icon-512x512.png"}
+</script>
+
+<link rel="stylesheet" href="/assets/css/style.css">
+</head>
+<body>
+
+<header class="header">
+  <div class="wrap header-in">
+    <button class="icon-btn" id="menuBtn" aria-label="Menu">☰</button>
+    <a class="logo" href="/"><img src="/assets/icons/icon-96x96.png" alt="TiyanPure" onerror="this.onerror=null;this.src='/assets/icons/logo-original.png'"><b>TiyanPure</b></a>
+    <form class="searchbar suggest" id="searchForm" action="/search.html" method="get" autocomplete="off">
+      <input id="q" name="q" type="search" placeholder="minecraft" aria-label="Cari aplikasi">
+      <button type="submit">Cari</button>
+      <div class="suggest-box" id="suggestBox"></div>
+    </form>
+    <button class="icon-btn install need-install" data-install title="Install aplikasi" style="display:none">⬇</button>
+  </div>
+</header>
+
+<nav class="drawer" id="drawer" aria-label="Navigasi">
+  <div class="mask"></div>
+  <div class="panel">
+    <div class="brand"><img src="/assets/icons/icon-96x96.png" alt="">TiyanPure</div>
+    <a class="row" href="/">🏠 Beranda</a>
+    <a class="row" href="/game">🎮 Game</a>
+    <a class="row" href="/app">📱 Aplikasi</a>
+    <a class="row" href="/discover">🧭 Menemukan</a>
+    <a class="row" href="/pre-register">⏳ Pra-Registrasi</a>
+    <a class="row" href="/game-24h">🔥 Game 24 Jam</a>
+    <a class="row" href="/app-24h">🔥 Aplikasi 24 Jam</a>
+    <a class="row" href="/editor-choice">⭐ Pilihan Editor</a>
+    <a class="row" href="/game-sales">💸 Obral Game</a>
+    <a class="row" href="/topic/top-new-games">🆕 Game Baru</a>
+    <a class="row" href="/topic/top-new-apps">🆕 Aplikasi Baru</a>
+    <a class="row" href="/submit-apk.html">⬆️ Submit APK</a>
+    <a class="row need-install" data-install href="javascript:void(0)" style="display:none">📲 Install Aplikasi</a>
+    <div class="foot">TiyanPure v1.0<br>Data aplikasi: live API (hasil scrape).<br>Unofficial clone untuk pembelajaran.</div>
+  </div>
+</nav>
+
+<main class="wrap">
+  <!-- Hero slider -->
+  <section class="hero">
+    <div class="slides" id="slideTrack">
+      <a class="slide" href="/search.html?q=block%20craft">
+        <img src="https://image.winudf.com/v2/image1/Y29tLmZ1bmdhbWVzLmJsb2NrY3JhZnRfYmFubmVyXzE3ODExODc1MjZfMDcz/banner.webp?w=1080&fakeurl=1&type=.webp" alt="Block Craft 3D" onerror="imgFallback(this)">
+        <span class="cap"><img src="https://image.winudf.com/v2/image1/Y29tLmZ1bmdhbWVzLmJsb2NrY3JhZnRfaWNvbl8xNzgxMDI3MjgxXzA0Mw/icon.webp?w=96&fakeurl=1&type=.webp" alt="" onerror="imgFallback(this)"><span class="n">Block Craft 3D: Building Game</span><span class="dl">Unduh</span></span>
+      </a>
+      <a class="slide" href="/search.html?q=pubg">
+        <img src="https://image.winudf.com/v2/image1/Y29tLnB1Ymcua3Jtb2JpbGVfYmFubmVyX2lkXzE3ODg5OTk1OTZfMDIz/banner.webp?w=1080&fakeurl=1&type=.webp" alt="PUBG Mobile" onerror="imgFallback(this)">
+        <span class="cap"><img src="https://image.winudf.com/v2/image1/Y29tLnB1Ymcua3Jtb2JpbGVfaWNvbl8xNzg4OTk5NjM3XzA2NQ/icon.webp?w=96&fakeurl=1&type=.webp" alt="" onerror="imgFallback(this)"><span class="n">PUBG Mobile</span><span class="dl">Unduh</span></span>
+      </a>
+      <a class="slide" href="/search.html?q=dragon%20city">
+        <img src="https://image.winudf.com/v2/image1/ZXMuc29jaWFscG9pbnQuRHJhZ29uQ2l0eV9iYW5uZXJfMTc4MTUzMzcwNl8wNTM/banner.webp?w=1080&fakeurl=1&type=.webp" alt="Dragon City" onerror="imgFallback(this)">
+        <span class="cap"><img src="https://image.winudf.com/v2/image1/ZXMuc29jaWFscG9pbnQuRHJhZ29uQ2l0eV9pY29uXzE3NTY4Mzk1MTZfMDEy/icon.webp?w=96&fakeurl=1&type=.webp" alt="" onerror="imgFallback(this)"><span class="n">Dragon City: Mobile Adventure</span><span class="dl">Unduh</span></span>
+      </a>
+    </div>
+    <div class="dots" id="slideDots"><span class="on"></span><span></span><span></span></div>
+  </section>
+
+  <!-- Trending -->
+  <section class="sec">
+    <div class="sec-h"><h2>Pencarian Trending</h2></div>
+    <div class="chips" id="trendChips"></div>
+  </section>
+
+  <!-- Install card -->
+  <section class="sec">
+    <div class="upload-card" style="display:flex;gap:12px;align-items:center">
+      <img src="/assets/icons/icon-96x96.png" alt="TiyanPure App" style="width:56px;height:56px;border-radius:14px">
+      <div style="flex:1"><b>Gunakan Aplikasi TiyanPure</b><br><span style="color:var(--muted);font-size:1.25rem">Install PWA — cepat, ringan, bisa dibuka offline.</span></div>
+      <button class="btn green need-install" data-install style="width:auto;margin:0;padding:10px 18px">Install</button>
+    </div>
+  </section>
+
+  <!-- Sections (live API) -->
+  <section class="sec">
+    <div class="sec-h"><h2>Menemukan</h2><a href="/discover" style="font-size:1.25rem">Lihat Semua →</a><span id="secDiscoverLive" style="font-size:1.2rem;color:var(--muted)"></span></div>
+    <div class="hscroll" id="secDiscover"></div>
+  </section>
+  <section class="sec">
+    <div class="sec-h"><h2>Populer</h2><a href="/game-24h" style="font-size:1.25rem">Lihat Semua →</a><span id="secPopLive" style="font-size:1.2rem;color:var(--muted)"></span></div>
+    <div class="hscroll" id="secPop"></div>
+  </section>
+  <section class="sec">
+    <div class="sec-h"><h2>Top Aplikasi</h2><a href="/app" style="font-size:1.25rem">Lihat Semua →</a><span id="secTopLive" style="font-size:1.2rem;color:var(--muted)"></span></div>
+    <div class="hscroll" id="secTop"></div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="brand"><img src="/assets/icons/icon-96x96.png" alt="">TiyanPure</div>
+    <div class="cols">
+      <div><h4>Jelajah</h4><a href="/">Beranda</a><a href="/game">Game</a><a href="/app">Aplikasi</a><a href="/discover">Menemukan</a><a href="/pre-register">Pra-Registrasi</a></div>
+      <div><h4>Top &amp; Promo</h4><a href="/game-24h">Game 24 Jam</a><a href="/app-24h">Aplikasi 24 Jam</a><a href="/editor-choice">Pilihan Editor</a><a href="/game-sales">Obral Game</a><a href="/topic/top-new-games">Game Baru</a><a href="/topic/top-new-apps">Aplikasi Baru</a></div>
+      <div><h4>Pengembang</h4><a href="/submit-apk.html">Submit APK</a><a href="https://developer.apkpure.com" target="_blank" rel="noopener">Developer Console</a><a href="/docs/API-ENDPOINTS.html">Dokumentasi API</a></div>
+      <div><h4>Perusahaan</h4><a href="/about.html">Tentang</a><a href="/contact-us.html">Hubungi Kami</a><a href="/support.html">Dukungan</a><a href="/privacy-policy.html">Privasi</a><a href="/terms.html">Syarat</a></div>
+    </div>
+    <div class="copy">© 2026 TiyanPure. Unofficial clone untuk pembelajaran.<br>Data &amp; file APK milik pemilik masing-masing (sumber live API APKPure).</div>
+  </div>
+</footer>
+
+<!-- Modal detail aplikasi -->
+<div class="modal" id="detailModal">
+  <div class="mask" onclick="closeDetail()"></div>
+  <div class="box">
+    <button class="close-x" onclick="closeDetail()">×</button>
+    <div class="d-head"><img id="dIcon" src="/assets/icons/icon-96x96.png" alt=""><div><h3 id="dName">-</h3><p id="dPkg">-</p></div></div>
+    <div class="meta"><div>Skor<b id="dScore">-</b></div><div>Versi<b id="dVer">-</b></div><div>Ukuran<b id="dSize">-</b></div></div>
+    <a class="btn green" id="dDl" href="#">⬇ Unduh APK</a>
+    <a class="btn blue" id="dPage" href="#">↗ Buka Halaman Aplikasi</a>
+    <div class="share-row">
+      <button class="btn blue" onclick="copyDetailLink()">🔗 Salin Link</button>
+      <button class="btn blue" onclick="shareDetail()">📤 Bagikan</button>
+    </div>
+    <a class="btn ghost" id="dWeb" href="#" target="_blank" rel="noopener">Detail di sumber ↗</a>
+    <button class="btn ghost" onclick="closeDetail()">Tutup</button>
+  </div>
+</div>
+
+<!-- Panduan install manual (iOS/lainnya) -->
+<div class="modal" id="iosGuide">
+  <div class="mask" onclick="document.getElementById('iosGuide').classList.remove('show')"></div>
+  <div class="box">
+    <button class="close-x" onclick="document.getElementById('iosGuide').classList.remove('show')">×</button>
+    <h3>📲 Cara Install TiyanPure</h3>
+    <div class="info-box">🍎 <b>iPhone (Safari):</b> ketuk tombol <b>Share</b> → <b>Add to Home Screen</b> → <b>Add</b>.</div>
+    <div class="info-box">🤖 <b>Android (Chrome):</b> ketuk <b>⋮</b> → <b>Install app / Add to Home screen</b>.</div>
+    <div class="info-box">🖥️ <b>Desktop (Chrome/Edge):</b> klik ikon <b>Install</b> di address bar.</div>
+    <button class="btn ghost" onclick="document.getElementById('iosGuide').classList.remove('show')">Tutup</button>
+  </div>
+</div>
+
+<!-- Banner install PWA -->
+<div class="pwa-banner" id="pwaBanner">
+  <img src="/assets/icons/icon-96x96.png" alt="TiyanPure">
+  <div class="t"><b>Install TiyanPure</b><p>Akses lebih cepat dari layar utama.</p></div>
+  <button class="btn green" data-install style="width:auto;margin:0;padding:9px 16px">Install</button>
+  <button class="x" id="pwaX">×</button>
+</div>
+
+<script src="/assets/js/common.js"></script>
+<script src="/assets/js/home.js"></script>
+</body>
+</html>

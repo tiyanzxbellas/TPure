@@ -1,0 +1,39 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "rewrites": [
+    { "source": "/apiproxy/:path*", "destination": "https://m.apkpure.com/:path*" },
+    { "source": "/api-upload/:path*", "destination": "https://developer.apkpure.com/:path*" },
+    { "source": "/d/:pkg", "destination": "/apk.html?pkg=:pkg" },
+    { "source": "/dl/:pkg", "destination": "/dl.html?pkg=:pkg" },
+    { "source": "/game", "destination": "/list.html?type=game" },
+    { "source": "/app", "destination": "/list.html?type=app" },
+    { "source": "/discover", "destination": "/list.html?type=discover" },
+    { "source": "/pre-register", "destination": "/list.html?type=pre-register" },
+    { "source": "/game-24h", "destination": "/list.html?type=game-24h" },
+    { "source": "/app-24h", "destination": "/list.html?type=app-24h" },
+    { "source": "/editor-choice", "destination": "/list.html?type=editor-choice" },
+    { "source": "/game-sales", "destination": "/list.html?type=game-sales" },
+    { "source": "/partner-developers", "destination": "/list.html?type=partner-developers" },
+    { "source": "/topic/:slug", "destination": "/list.html?type=topic&topic=:slug" }
+  ],
+  "headers": [
+    {
+      "source": "/sw.js",
+      "headers": [{ "key": "Cache-Control", "value": "no-cache" }]
+    },
+    {
+      "source": "/manifest.webmanifest",
+      "headers": [{ "key": "Cache-Control", "value": "public, max-age=3600" }]
+    },
+    {
+      "source": "/assets/icons/:file*",
+      "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }]
+    },
+    {
+      "source": "/assets/:path*",
+      "headers": [{ "key": "Cache-Control", "value": "public, max-age=86400" }]
+    }
+  ]
+}

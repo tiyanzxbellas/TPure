@@ -1,0 +1,13 @@
+# TiyanPure — URL cantik untuk Netlify / Cloudflare Pages
+/d/:pkg                    /apk.html?pkg=:pkg              200
+/dl/:pkg                   /dl.html?pkg=:pkg               200
+/game                      /list.html?type=game             200
+/app                       /list.html?type=app              200
+/discover                  /list.html?type=discover         200
+/pre-register              /list.html?type=pre-register     200
+/game-24h                  /list.html?type=game-24h         200
+/app-24h                   /list.html?type=app-24h          200
+/editor-choice             /list.html?type=editor-choice    200
+/game-sales                /list.html?type=game-sales       200
+/partner-developers        /list.html?type=partner-developers 200
+/topic/:slug               /list.html?type=topic&topic=:slug 200

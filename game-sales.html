@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Obral Game — TiyanPure</title>
+<meta name="description" content="Jelajahi game & aplikasi Android di TiyanPure: unduh APK/XAPK gratis, cepat, dan aman.">
+<meta name="robots" content="index, follow">
+<meta name="theme-color" content="#0b1220">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="TiyanPure">
+<meta property="og:title" content="Jelajah Game & Aplikasi — TiyanPure">
+<meta property="og:description" content="Jelajahi game & aplikasi Android, unduh APK/XAPK gratis.">
+<meta property="og:image" content="https://tiyanpure.vercel.app/assets/icons/og-cover.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://tiyanpure.vercel.app/assets/icons/og-cover.jpg">
+<link rel="icon" type="image/x-icon" href="/assets/icons/favicon.ico">
+<link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="stylesheet" href="/assets/css/style.css">
+</head>
+<body data-list-type="game-sales">
+<header class="header">
+  <div class="wrap header-in">
+    <button class="icon-btn" id="menuBtn" aria-label="Menu">☰</button>
+    <a class="logo" href="/"><img src="/assets/icons/icon-96x96.png" alt="TiyanPure"><b>TiyanPure</b></a>
+    <form class="searchbar" action="/search.html" method="get" autocomplete="off">
+      <input name="q" type="search" placeholder="Cari aplikasi…" aria-label="Cari aplikasi">
+      <button type="submit">Cari</button>
+    </form>
+    <button class="icon-btn install need-install" data-install title="Install aplikasi" style="display:none">⬇</button>
+  </div>
+</header>
+
+<nav class="drawer" id="drawer" aria-label="Navigasi">
+  <div class="mask"></div>
+  <div class="panel">
+    <div class="brand"><img src="/assets/icons/icon-96x96.png" alt="">TiyanPure</div>
+    <a class="row" href="/">🏠 Beranda</a>
+    <a class="row" href="/game">🎮 Game</a>
+    <a class="row" href="/app">📱 Aplikasi</a>
+    <a class="row" href="/discover">🧭 Menemukan</a>
+    <a class="row" href="/pre-register">⏳ Pra-Registrasi</a>
+    <a class="row" href="/game-24h">🔥 Game 24 Jam</a>
+    <a class="row" href="/app-24h">🔥 Aplikasi 24 Jam</a>
+    <a class="row" href="/editor-choice">⭐ Pilihan Editor</a>
+    <a class="row" href="/game-sales">💸 Obral Game</a>
+    <a class="row" href="/topic/top-new-games">🆕 Game Baru</a>
+    <a class="row" href="/topic/top-new-apps">🆕 Aplikasi Baru</a>
+    <a class="row" href="/submit-apk.html">⬆️ Submit APK</a>
+    <a class="row need-install" data-install href="javascript:void(0)" style="display:none">📲 Install Aplikasi</a>
+  </div>
+</nav>
+
+<main class="wrap">
+  <div class="crumb"><a href="/">Beranda</a> / <span id="crumbHere">Jelajah</span></div>
+  <h1 class="page-title" id="pageTitle">Jelajah</h1>
+  <p class="page-desc" id="pageDesc"></p>
+  <div class="share-row">
+    <button class="btn blue" onclick="copyPageLink()">🔗 Salin Link Halaman</button>
+    <button class="btn blue" onclick="shareURL(location.href, document.title, '')">📤 Bagikan</button>
+  </div>
+  <div id="sections"></div>
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="brand"><img src="/assets/icons/icon-96x96.png" alt="">TiyanPure</div>
+    <div class="cols">
+      <div><h4>Jelajah</h4><a href="/">Beranda</a><a href="/game">Game</a><a href="/app">Aplikasi</a><a href="/discover">Menemukan</a><a href="/pre-register">Pra-Registrasi</a></div>
+      <div><h4>Top &amp; Promo</h4><a href="/game-24h">Game 24 Jam</a><a href="/app-24h">Aplikasi 24 Jam</a><a href="/editor-choice">Pilihan Editor</a><a href="/game-sales">Obral Game</a><a href="/topic/top-new-games">Game Baru</a><a href="/topic/top-new-apps">Aplikasi Baru</a></div>
+      <div><h4>Pengembang</h4><a href="/submit-apk.html">Submit APK</a><a href="https://developer.apkpure.com" target="_blank" rel="noopener">Developer Console</a><a href="/docs/API-ENDPOINTS.html">Dokumentasi API</a></div>
+      <div><h4>Perusahaan</h4><a href="/about.html">Tentang</a><a href="/contact-us.html">Hubungi Kami</a><a href="/support.html">Dukungan</a><a href="/privacy-policy.html">Privasi</a><a href="/terms.html">Syarat</a></div>
+    </div>
+    <div class="copy">© 2026 TiyanPure. Unofficial clone untuk pembelajaran.<br>Data &amp; file APK milik pemilik masing-masing (sumber live API).</div>
+  </div>
+</footer>
+
+<div class="modal" id="detailModal">
+  <div class="mask" onclick="closeDetail()"></div>
+  <div class="box">
+    <button class="close-x" onclick="closeDetail()">×</button>
+    <div class="d-head"><img id="dIcon" src="/assets/icons/icon-96x96.png" alt=""><div><h3 id="dName">-</h3><p id="dPkg">-</p></div></div>
+    <div class="meta"><div>Skor<b id="dScore">-</b></div><div>Versi<b id="dVer">-</b></div><div>Ukuran<b id="dSize">-</b></div></div>
+    <a class="btn green" id="dDl" href="#">⬇ Unduh APK</a>
+    <a class="btn blue" id="dPage" href="#">↗ Buka Halaman Aplikasi</a>
+    <div class="share-row">
+      <button class="btn blue" onclick="copyDetailLink()">🔗 Salin Link</button>
+      <button class="btn blue" onclick="shareDetail()">📤 Bagikan</button>
+    </div>
+    <a class="btn ghost" id="dWeb" href="#" target="_blank" rel="noopener">Detail di sumber ↗</a>
+  </div>
+</div>
+
+<div class="modal" id="iosGuide">
+  <div class="mask" onclick="document.getElementById('iosGuide').classList.remove('show')"></div>
+  <div class="box">
+    <button class="close-x" onclick="document.getElementById('iosGuide').classList.remove('show')">×</button>
+    <h3>📲 Cara Install TiyanPure</h3>
+    <div class="info-box">🍎 <b>iPhone (Safari):</b> Share → Add to Home Screen → Add.</div>
+    <div class="info-box">🤖 <b>Android (Chrome):</b> ⋮ → Install app / Add to Home screen.</div>
+    <div class="info-box">🖥️ <b>Desktop:</b> klik ikon Install di address bar.</div>
+    <button class="btn ghost" onclick="document.getElementById('iosGuide').classList.remove('show')">Tutup</button>
+  </div>
+</div>
+
+<div class="pwa-banner" id="pwaBanner">
+  <img src="/assets/icons/icon-96x96.png" alt="TiyanPure">
+  <div class="t"><b>Install TiyanPure</b><p>Akses lebih cepat dari layar utama.</p></div>
+  <button class="btn green" data-install style="width:auto;margin:0;padding:9px 16px">Install</button>
+  <button class="x" id="pwaX">×</button>
+</div>
+
+<script src="/assets/js/common.js"></script>
+<script src="/assets/js/list.js"></script>
+</body>
+</html>

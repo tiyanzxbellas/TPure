@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dokumentasi API — TiyanPure</title>
+<meta name="description" content="Dokumentasi hasil scrape endpoint & base URL yang dipakai TiyanPure.">
+<meta name="theme-color" content="#0b1220">
+<meta property="og:title" content="Dokumentasi API — TiyanPure">
+<meta property="og:image" content="https://tiyanpure.vercel.app/assets/icons/og-cover.jpg">
+<link rel="icon" href="/assets/icons/favicon.ico">
+<link rel="stylesheet" href="/assets/css/style.css">
+<style>
+.doc{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;margin:16px 0;overflow-x:auto}
+.doc h1{font-size:2rem;margin:10px 0}.doc h2{font-size:1.7rem;margin:22px 0 8px;color:var(--sky)}
+.doc h3{font-size:1.5rem;margin:16px 0 6px;color:var(--green)}
+.doc table{border-collapse:collapse;width:100%;font-size:1.2rem;margin:10px 0}
+.doc th,.doc td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+.doc th{background:var(--bg2);color:var(--sky)}
+.doc code{background:var(--bg2);padding:1px 6px;border-radius:6px;font-size:1.15rem;color:var(--green);word-break:break-all}
+.doc pre{background:var(--bg2);padding:12px;border-radius:10px;overflow-x:auto}
+.doc pre code{background:none;padding:0}
+.doc blockquote{border-left:3px solid var(--green);margin:10px 0;padding:6px 12px;color:var(--muted)}
+.doc ul,.doc ol{margin:8px 0 8px 22px}.doc li{margin:4px 0}
+</style>
+</head>
+<body>
+<header class="header"><div class="wrap header-in">
+<a class="logo" href="/"><img src="/assets/icons/icon-96x96.png" alt="TiyanPure"><b>TiyanPure</b></a>
+<span style="color:var(--muted)">/ Dokumentasi API (hasil scrape)</span>
+</div></header>
+<main class="wrap"><div class="doc"><h1>Hasil Scrape — APKPure Mobile Web: API Endpoint &amp; Base URL</h1>
+<blockquote>
+<p><strong>Sumber yang di-scrape:</strong>
+- <code>https://m.apkpure.com/id/</code> (homepage)
+- <code>https://m.apkpure.com/id/submit-apk</code> (halaman upload APK)</p>
+<p><strong>Tanggal scrape:</strong> 12 September 2026
+<strong>Metode:</strong> curl (UA Chrome Android) + parsing HTML/JS inline &amp; eksternal, lalu verifikasi ulang tiap endpoint penting dengan request langsung.
+<strong>File mentah tersimpan di:</strong> <code>apkpure_scrape/</code> (<code>home.html</code>, <code>submit.html</code>, <code>js/*.js</code>, <code>robots.txt</code>)</p>
+<p>Kesimpulan singkat: <strong>kedua URL memang 1 web yang sama</strong> — template, <code>global_v1285.min.js</code>, analytics, dan pola auth-nya identik. Bedanya hanya modul konten (<code>dt_report_s_v1239.js?page=page_home_common</code> vs <code>page_category_ranking</code>) dan modul upload chunked (jQuery File Upload) yang hanya ada di halaman submit-apk.</p>
+</blockquote>
+<hr />
+<h2>1. Base URL / Domain</h2>
+<h3>1.1 Domain utama APKPure</h3>
+<table>
+<thead>
+<tr>
+<th>Base URL</th>
+<th>Fungsi</th>
+<th>Bukti</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>https://m.apkpure.com</code></td>
+<td><strong>Base utama (mobile web)</strong> — semua path <code>/id/...</code> di bawah ini menempel di sini</td>
+<td>URL yang di-scrape</td>
+</tr>
+<tr>
+<td><code>https://apkpure.com</code></td>
+<td>Desktop web; canonical (<code>&lt;link rel=canonical href="https://apkpure.com/id/"&gt;</code>); <strong>action form search</strong> mengarah ke sini</td>
+<td><code>home.html</code> form <code>action="https://apkpure.com/id/search"</code></td>
+</tr>
+<tr>
+<td><code>https://developer.apkpure.com</code></td>
+<td>Developer Console + <strong>API upload APK</strong></td>
+<td><code>initPostUploadApk('https://m.apkpure.com','https://developer.apkpure.com')</code></td>
+</tr>
+<tr>
+<td><code>https://i.apkpure.com</code></td>
+<td><strong>Identity/Account API</strong> (dibaca dari <code>data-iapi-url="https://i.apkpure.com"</code> di <code>&lt;body&gt;</code>) + serve <code>user_v1002.js</code></td>
+<td><code>home.html</code>, <code>submit.html</code>, <code>global_v1285.min.js</code></td>
+</tr>
+<tr>
+<td><code>https://a.apkpure.com</code></td>
+<td>API share-counter; juga di dns-prefetch/preconnect</td>
+<td><code>$.ajax({url:"https://a.apkpure.com/api-shares.json?url="...})</code></td>
+</tr>
+<tr>
+<td><code>https://download.apkpure.com</code></td>
+<td>CDN download (preconnect + dns-prefetch)</td>
+<td><code>&lt;link rel=preconnect href="//download.apkpure.com"&gt;</code></td>
+</tr>
+<tr>
+<td><code>https://image.winudf.com</code></td>
+<td>Image CDN (icon, banner, screenshot, PWA icon) — domain paling sering muncul (±278 ref di homepage)</td>
+<td>seluruh <code>&lt;img&gt;</code></td>
+</tr>
+<tr>
+<td><code>https://static.apkpure.com</code></td>
+<td>Static asset legacy (menu png, stars svg, no_login)</td>
+<td>CSS inline + <code>user_v1002.js</code></td>
+</tr>
+<tr>
+<td><code>https://static.apkpures.xyz</code></td>
+<td>Static asset utama (JS/CSS mobile &amp; www: <code>global_*</code>, <code>search_*</code>, fileupload, touchslide…)</td>
+<td>semua <code>&lt;script src&gt;</code> lokal</td>
+</tr>
+<tr>
+<td><code>https://apkpure.com/static-2/</code></td>
+<td>Static asset v2 (device lib, SVG sprite)</td>
+<td><code>device-1.2.49-min.js</code>, <code>*.stack-*.svg</code></td>
+</tr>
+<tr>
+<td><code>https://a.apkpures.xyz</code></td>
+<td>Analytics + DT SDK (<code>analytics_v1025.js</code>, <code>dt_sdk_v1023.js</code>, <code>dt_report_s_v1239.js</code>)</td>
+<td><code>&lt;script src="//a.apkpures.xyz/..."&gt;</code></td>
+</tr>
+<tr>
+<td><code>https://a.cdnpure.com</code></td>
+<td>Analytics collect + group_user report</td>
+<td><code>analytics_v1025.js</code>, inline <code>$.ajax</code></td>
+</tr>
+<tr>
+<td><code>https://r.cdnpure.com</code></td>
+<td>Event/device/speed report</td>
+<td>inline <code>$.ajax</code> + <code>fetch</code> + <code>Image().src</code></td>
+</tr>
+<tr>
+<td><code>https://beacon.cdnpure.com</code></td>
+<td><strong>Report domain aktif DT SDK</strong> (<code>reportDomain</code> di <code>reportDtConfig</code>; fallback default <code>r.apkpure.net</code>)</td>
+<td><code>window.reportDtConfig</code> inline</td>
+</tr>
+<tr>
+<td><code>https://r.apkpure.net</code></td>
+<td>Fallback report domain DT (<code>/webReport</code>, <code>/tmp</code>, <code>/report</code>)</td>
+<td><code>dt_sdk_v1023.js</code>, <code>dt_report_home.js</code></td>
+</tr>
+<tr>
+<td><code>https://r-eo.apkpure.net</code></td>
+<td>Speed report jalur EO (<code>ru_speed</code>)</td>
+<td>inline <code>fetch(...)</code></td>
+</tr>
+<tr>
+<td><code>https://svibeacon.onezapp.com</code></td>
+<td>DataHub upload (<code>/analytics/v2_upload</code>, dipakai saat <code>use_datahub:true</code>)</td>
+<td><code>dt_sdk_v1023.js</code></td>
+</tr>
+<tr>
+<td><code>https://tapi.pureapk.com</code></td>
+<td>Push/FCM token report API (<code>/v3/report_token</code>)</td>
+<td>inline <code>uploadToken()</code></td>
+</tr>
+<tr>
+<td><code>https://cdnpure.com</code></td>
+<td>Library iklan + share-button</td>
+<td><code>ads-1.0.4.js</code>, <code>share-button.1.2.4.*</code></td>
+</tr>
+<tr>
+<td><code>https://iphone.apkpure.com</code></td>
+<td>Knowledge base upload aplikasi iOS (.IPA)</td>
+<td>blok <code>ios-text</code> di submit-apk</td>
+</tr>
+<tr>
+<td><code>https://windows.apkpure.com</code>, <code>https://tvonic.apkpure.com</code>, <code>https://apk.com</code>, <code>https://aipure.ai</code></td>
+<td>Sister site (footer)</td>
+<td>footer homepage</td>
+</tr>
+</tbody>
+</table>
+<h3>1.2 Domain pihak ketiga</h3>
+<table>
+<thead>
+<tr>
+<th>Domain</th>
+<th>Fungsi</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>www.googletagmanager.com</code></td>
+<td>gtag (<code>UA-61066224-5</code> di home, <code>G-NT1VQC8HKJ</code> di submit)</td>
+</tr>
+<tr>
+<td><code>pagead2.googlesyndication.com</code>, <code>googleads.g.doubleclick.net</code></td>
+<td>AdSense (<code>ca-pub-6510778225276763</code>)</td>
+</tr>
+<tr>
+<td><code>www.gstatic.com</code></td>
+<td>Firebase SDK (<code>firebase-app.js</code>, <code>firebase-messaging.js</code> v8.10.0)</td>
+</tr>
+<tr>
+<td><code>cdnjs.cloudflare.com</code></td>
+<td>fancybox, clipboard.js, typeahead</td>
+</tr>
+<tr>
+<td><code>apkpure.disqus.com</code></td>
+<td>Komentar Disqus (detail page)</td>
+</tr>
+<tr>
+<td><code>www.pushbullet.com</code>, <code>www.apkpure.com/pushbullet</code></td>
+<td>Notifikasi update aplikasi</td>
+</tr>
+<tr>
+<td><code>cdn.taboola.com</code></td>
+<td>Taboola widget</td>
+</tr>
+<tr>
+<td><code>chrome.google.com</code> (webstore)</td>
+<td>APK Downloader extension (<code>glngapejbnmnicniccdcemghaoaopdji</code>)</td>
+</tr>
+<tr>
+<td><code>t.me</code>, <code>instagram.com</code>, <code>twitter.com</code>, <code>youtube.com</code>, <code>facebook.com</code>, <code>vk.com</code></td>
+<td>Sosial media</td>
+</tr>
+<tr>
+<td><code>buffbuff.com</code>, <code>snaptube.live</code></td>
+<td>Partner (<code>apkpurePartnerConfig</code>)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>2. API Endpoint</h2>
+<p>Legenda: ✅ = sudah diverifikasi live saat scrape (12 Sep 2026). <code>{lang}</code> = kode bahasa, mis. <code>/id</code>.</p>
+<h3>2.1 Search &amp; Discovery — base <code>https://m.apkpure.com</code> / <code>https://apkpure.com</code></h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Parameter</th>
+<th>Keterangan</th>
+<th>Sumber</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>✅ GET</td>
+<td><code>{lang}/api/v1/search_suggestion_new?key=%QUERY&amp;limit=20</code></td>
+<td><code>key</code> (query), <code>limit</code> (default 20)</td>
+<td><strong>Autocomplete search</strong> (Bloodhound <code>remote.url</code>). Response: array JSON berisi <code>key</code>, <code>packageName</code>, <code>title</code>, <code>icon</code>, <code>score</code>, <code>scoreTotal</code>, <code>installTotal</code>, <code>url</code>, <code>fullUrl</code>, <code>downloadUrl</code>, <code>fullDownloadUrl</code>, <code>fileId</code>, <code>fileSize</code>, <code>version</code>, <code>versionCode</code>, <code>searchInfo.rid</code>, <code>showDownloadBtn</code>, dsb.</td>
+<td><code>search_v1011.min.js</code></td>
+</tr>
+<tr>
+<td>2</td>
+<td>✅ GET</td>
+<td><code>https://apkpure.com/{lang}/search?q=...</code></td>
+<td><code>q</code>, <code>ici=hot_index</code> (trending), <code>region</code>, <code>search_type</code>, <code>search_input_key</code></td>
+<td><strong>Halaman hasil search</strong> — action dari <code>&lt;form class="formsearch"&gt;</code>. Catatan: form di mobile web POST/GET-nya ke domain <strong>desktop</strong> <code>apkpure.com</code>, bukan <code>m.*</code>.</td>
+<td><code>home.html</code> <code>&lt;form action=...&gt;</code></td>
+</tr>
+<tr>
+<td>3</td>
+<td>GET</td>
+<td>link trending <code>https://apkpure.com/{lang}/search?q=...&amp;ici=hot_index</code></td>
+<td>—</td>
+<td>10 keyword trending di homepage (contoh: <code>call of duty</code>, <code>minecraft</code>, <code>fc mobile</code>…)</td>
+<td><code>home.html</code></td>
+</tr>
+</tbody>
+</table>
+<p>Contoh respons #1 (<code>GET https://m.apkpure.com/id/api/v1/search_suggestion_new?key=minecraft&amp;limit=3</code>):</p>
+<pre><code class="language-json">[{&quot;key&quot;:&quot;Minecraft Original&quot;,&quot;packageName&quot;:&quot;com.minecraftpe.minecraft.original.free&quot;,
+&quot;title&quot;:&quot;Minecraft Original&quot;,&quot;icon&quot;:&quot;https://image.winudf.com/...&quot;,&quot;installTotal&quot;:&quot;10M+&quot;,
+&quot;score&quot;:&quot;5.2&quot;,&quot;fullUrl&quot;:&quot;https://apkpure.com/id/minecraft-original/com.minecraftpe.minecraft.original.free&quot;,
+&quot;downloadUrl&quot;:&quot;/id/minecraft-original/com.minecraftpe.minecraft.original.free/download?utm_content=1008&quot;,
+&quot;fullDownloadUrl&quot;:&quot;https://m.apkpure.com/id/.../download?utm_content=1008&quot;,
+&quot;fileId&quot;:&quot;b/APK/Y29tLm1pbmVjcmFmdHBl...&quot;,&quot;fileSize&quot;:136553032,&quot;version&quot;:&quot;1.16.201&quot;,&quot;versionCode&quot;:3, ...}]
+</code></pre>
+<h3>2.2 Info aplikasi &amp; AJAX listing — base <code>https://m.apkpure.com</code></h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Parameter / Body</th>
+<th>Keterangan</th>
+<th>Sumber</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>4</td>
+<td>✅ POST</td>
+<td><code>/api/www/command-version_more</code></td>
+<td><code>package</code>, <code>vid</code> (version id), <code>lang</code></td>
+<td>Ambil changelog versi lama ("more" di daftar versi, detail page). Tes dummy → <code>{"error":1}</code> (endpoint hidup).</td>
+<td><code>global_v1285.min.js</code> → <code>initVersions</code></td>
+</tr>
+<tr>
+<td>5</td>
+<td>GET</td>
+<td><code>{halaman-listing}?ajax=1&amp;page=N</code></td>
+<td><code>ajax=1</code>, <code>page</code></td>
+<td><strong>Paginasi "load more"</strong> — <code>initLoadMore</code> mengubah href tombol menjadi <code>setUrlParams(t,{ajax:1})</code>, lalu append HTML. Juga dipakai form <code>#search-page</code>.</td>
+<td><code>global_v1285.min.js</code>; didukung <code>robots.txt</code> (<code>Disallow: /*?*ajax=1*</code>)</td>
+</tr>
+<tr>
+<td>6</td>
+<td>✅ GET</td>
+<td><code>{lang}/api/v2/app-update-recommend</code></td>
+<td>(butuh login, cookie session)</td>
+<td>Rekomendasi update aplikasi di menu user. Tanpa login → <code>{"error":-1,"msg":"User not logged in"}</code>.</td>
+<td><code>user_v1002.js</code> → <code>$.get(`${$$x_ll}/api/v2/app-update-recommend`)</code></td>
+</tr>
+<tr>
+<td>7</td>
+<td>GET</td>
+<td><code>//apkpure.disqus.com/embed.js</code> + iframe <code>comment_url + $.param(comment_config)</code></td>
+<td>—</td>
+<td>Sistem komentar (detail page).</td>
+<td><code>global_v1285.min.js</code> → <code>initDisqus</code></td>
+</tr>
+</tbody>
+</table>
+<h3>2.3 Akun &amp; Auth — base <code>https://i.apkpure.com</code> (via <code>data-iapi-url</code>) + same-origin</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Body / Param</th>
+<th>Keterangan</th>
+<th>Sumber</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>8</td>
+<td>✅ POST</td>
+<td><code>https://i.apkpure.com/account/api/v2/user_email_auth</code></td>
+<td>(kosong; mengandalkan cookie, <code>withCredentials:true</code>)</td>
+<td>Otorisasi/subscribe email user. Tanpa login → <code>{"error":1,"msg":"user no login"}</code>. Dipanggil dari popup bell-email &amp; <code>user_sub_confirm</code>.</td>
+<td><code>global_v1285.min.js</code> → <code>initEmailAuthorization</code>; inline home</td>
+</tr>
+<tr>
+<td>9</td>
+<td>POST</td>
+<td><code>https://i.apkpure.com/account/api/v2/user_download_info</code></td>
+<td><code>packageName</code></td>
+<td>Mencatat info download user saat klik <code>.download-box</code>.</td>
+<td><code>global_v1285.min.js</code> → <code>initDetailsUserDownload</code></td>
+</tr>
+<tr>
+<td>10</td>
+<td>GET</td>
+<td><code>{lang}/account/auth/login</code></td>
+<td>—</td>
+<td>Mengembalikan JSON <code>{newLoginCss, newLoginHtml, newLoginJs, cdnjsUrl}</code> untuk popup login (One-Tap fallback).</td>
+<td><code>global_v1285.min.js</code> → <code>oneTapTAfallback</code></td>
+</tr>
+<tr>
+<td>11</td>
+<td>POST</td>
+<td><code>{action form #cmt-login-form}</code></td>
+<td><code>account</code>, <code>password</code> (+<code>captcha</code> jika ada)</td>
+<td>Login akun (AJAX, <code>withCredentials</code>). Validasi: username 1–20 char, password 6–32 char.</td>
+<td><code>global_v1285.min.js</code> → <code>initLoginRegister</code></td>
+</tr>
+<tr>
+<td>12</td>
+<td>POST</td>
+<td><code>{action form #cmt-register-form}</code></td>
+<td><code>account</code>, <code>email</code>, <code>password</code>, <code>password_r</code> (+<code>captcha</code>)</td>
+<td>Register akun. Sukses → redirect <code>apkpure__next</code> cookie / <code>{lang}/account/email?show_tip=1</code> / <code>{lang}/</code></td>
+<td><code>global_v1285.min.js</code></td>
+</tr>
+<tr>
+<td>13</td>
+<td>POST</td>
+<td><code>{action form reset password}</code></td>
+<td><code>email</code>, <code>captcha</code>, <code>password</code></td>
+<td>Reset password. Sukses → redirect <code>{lang}/login</code>.</td>
+<td><code>global_v1285.min.js</code></td>
+</tr>
+<tr>
+<td>14</td>
+<td>GET (popup)</td>
+<td><code>/auth/{provider}</code> dan <code>/auth/v2/{google,facebook,twitter}</code></td>
+<td>—</td>
+<td>Login sosial via <code>window.open(url,"Connect",700x520)</code>. Google/FB/Twitter memakai <code>/auth/v2/</code>. Callback global: <code>window.popupResult</code>.</td>
+<td><code>global_v1285.min.js</code> (<code>[data-social]</code> handler)</td>
+</tr>
+<tr>
+<td>15</td>
+<td>POST</td>
+<td><code>{iapi}/auth/v2/one-tap/verify</code></td>
+<td><code>credential</code> (Google One Tap JWT)</td>
+<td>Verifikasi One Tap → response <code>{user}</code> lalu <code>setNavUserInfo()</code>.</td>
+<td><code>global_v1285.min.js</code></td>
+</tr>
+<tr>
+<td>16</td>
+<td>GET</td>
+<td><code>/account/logout</code></td>
+<td>—</td>
+<td>Logout (link nav + menu).</td>
+<td><code>home.html</code>, <code>submit.html</code>, <code>user_v1002.js</code></td>
+</tr>
+<tr>
+<td>17</td>
+<td>GET</td>
+<td><code>{lang}/account/email?show_tip=1</code></td>
+<td>—</td>
+<td>Landing setelah register.</td>
+<td><code>global_v1285.min.js</code></td>
+</tr>
+<tr>
+<td>18</td>
+<td>GET</td>
+<td>halaman: <code>{lang}/login</code>, <code>{lang}/users/</code>, <code>{lang}/users/{id}</code>, <code>…/download-management</code>, <code>…/settings</code></td>
+<td>—</td>
+<td>Halaman user (di-set dinamis oleh <code>setNavUserInfo()</code>; guest diarahkan ke <code>/id/login</code>).</td>
+<td><code>user_v1002.js</code></td>
+</tr>
+</tbody>
+</table>
+<h3>2.4 Upload APK — halaman <code>submit-apk</code> → base <code>https://developer.apkpure.com</code> ✅</h3>
+<p>Alur lengkap dari inline script (fungsi <code>initPostUploadApk(local_host, post_host)</code>):</p>
+<pre><code class="language-js">initPostUploadApk('https://m.apkpure.com', 'https://developer.apkpure.com');
+// url upload = post_host + '/api/v1/user_upload/apk'
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Detail</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>19</td>
+<td>✅ POST</td>
+<td><code>https://developer.apkpure.com/api/v1/user_upload/apk</code></td>
+<td><strong>Upload APK/XAPK chunked</strong> via jQuery File Upload. Probe GET → <code>{"commands":{"statusCode":"INCORRECT_PKG","displayMessage":"Invalid Package Name"},...}</code> (endpoint hidup).</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>Konfigurasi upload</td>
+<td><code>maxChunkSize: 1 MB</code>, <code>type:'POST'</code>, <code>withCredentials:true</code>, <code>acceptFileTypes: /(\.\|\/)(apk\|xapk)$/i</code>, <code>maxFileSize: 2000 MB</code>, <code>limitConcurrentUploads: 1</code>, <code>dropZone: null</code>, <code>dataType:'json'</code></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td><code>formData</code></td>
+<td><code>package_name</code> (#file-upload-package), <code>email</code> (#file-upload-email), <code>whats_new</code> (#file-upload-whats_new), <code>name</code> (#file-upload-name) — ketiganya wajib lolos <code>reportValidity()</code> sebelum upload jalan</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>Header per chunk</td>
+<td><code>X-File-Identifier: {"chunk_total": ceil(total/maxChunkSize), "chunk_index": n, "chunk_logo": "&lt;Date.now()&gt;_&lt;package&gt;"}</code> (di-set di <code>beforeSend</code>)</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>Respons</td>
+<td><code>data.jqXHR.responseJSON.commands.statusCode === 'SUCCESS'</code> → UI "Your App is Success" + trigger <code>.js-upload-questionnaire-trigger</code>; selain itu tampilkan <code>commands.displayMessage</code>, tombol jadi "Upload Again". <code>chunkdone</code> non-SUCCESS menghentikan chunk berikutnya. Progress lingkaran via callback <code>progress</code>.</td>
+</tr>
+<tr>
+<td>20</td>
+<td>—</td>
+<td>Input file</td>
+<td><code>&lt;input type="file" id="file_upload" name="file" accept=".apk,.xapk"&gt;</code></td>
+</tr>
+<tr>
+<td>21</td>
+<td>GET</td>
+<td><code>https://iphone.apkpure.com/ipa-install-online</code></td>
+<td>Jalur upload aplikasi iOS (.IPA) — knowledge base.</td>
+</tr>
+</tbody>
+</table>
+<h3>2.5 Download — base <code>https://m.apkpure.com</code> + CDN</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Method</th>
+<th>Endpoint / Pola</th>
+<th>Keterangan</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>22</td>
+<td>GET</td>
+<td><code>{lang}/{slug}/{package}/download[/{version}]?utm_content=…&amp;icn=…&amp;ici=…&amp;from=…</code></td>
+<td>Pola URL download. Contoh nyata: <code>/id/apkpure/com.apkpure.aegon/download/3.20.7803?utm_content=1006&amp;icn=aegon&amp;ici=text_home-m&amp;from=text_home-m</code>. Search-suggest juga mengembalikan <code>downloadUrl</code>/<code>fullDownloadUrl</code> per aplikasi.</td>
+</tr>
+<tr>
+<td>23</td>
+<td>GET</td>
+<td><code>//download.apkpure.com</code></td>
+<td>Host file download (preconnect).</td>
+</tr>
+<tr>
+<td>24</td>
+<td>GET (jsonp)</td>
+<td><code>{action #captcha_form}</code> → <code>…?callback=…</code></td>
+<td>Download region-terkunci: submit captcha → <code>status_code:"SUCCESS"</code> → redirect <code>down_url</code>; <code>CAPTCHA_ERROR</code> → tampilkan error. Terkait string <code>REGION_DOWN-*</code> di <code>language_v1034.js</code>.</td>
+</tr>
+<tr>
+<td>25</td>
+<td>GET (popup)</td>
+<td><code>https://www.apkpure.com/pushbullet?package={pkg}</code> atau <code>https://www.pushbullet.com/channel-popup?tag={tag}</code></td>
+<td>Follow update aplikasi (700×460).</td>
+</tr>
+</tbody>
+</table>
+<h3>2.6 Analytics, reporting &amp; tracking</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Parameter / Body</th>
+<th>Keterangan</th>
+<th>Sumber</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>26</td>
+<td>✅ GET (jsonp)</td>
+<td><code>//a.cdnpure.com/analytics/collect_v1025?...&amp;callback=…</code></td>
+<td><code>qimei</code> (localStorage <code>__BEACON_deviceId</code>), <code>client_id</code> (cookie <code>_ga</code>), <code>cmd</code> (<code>pageview</code>/<code>event</code>), <code>c</code>, <code>a</code>, <code>l</code>, <code>v</code>, <code>hl</code>, <code>t</code>, <code>w</code> (btoa <code>navigator.webdriver</code>), <code>r</code> (referrer), <code>u</code> (URL), <code>tzo</code>, <code>page_config</code>, <code>sample</code>, <code>f/fc/ff</code> (fingerprint)</td>
+<td><code>$$.analytics.send(cmd,c,a,l,v)</code>; langsung kirim <code>pageview</code> saat load. Tes → <code>test({"cmd":"pageview","error":""})</code>.</td>
+<td><code>analytics_v1025.js</code></td>
+</tr>
+<tr>
+<td>27</td>
+<td>GET</td>
+<td><code>//a.cdnpure.com/report/group_user</code></td>
+<td><code>user_id</code> (qimei cookie, direfresh), <code>biz_id='apkpure'</code>, <code>sub_bizid='h5'</code>, <code>h5_url</code>, <code>h5_ref</code>, <code>event_timestamp</code>; <code>withCredentials:true</code></td>
+<td>Report grup user saat load.</td>
+<td>inline home &amp; submit</td>
+</tr>
+<tr>
+<td>28</td>
+<td>POST (JSON)</td>
+<td><code>https://r.cdnpure.com/report?project=web_navigator</code></td>
+<td><code>{pagePvId…, interactionType, eventData{clientX,clientY,targetTag,…}, ts, pageUrl, referrer, host}</code></td>
+<td>Report interaksi pertama user (click/touchstart/… sekali per tipe).</td>
+<td>inline home</td>
+</tr>
+<tr>
+<td>29</td>
+<td>GET</td>
+<td><code>https://{deviceReportDomain‖r.cdnpure.com}/report?project=device_report&amp;host=…&amp;msg=…</code></td>
+<td><code>project=device_report</code>, <code>host</code>, <code>msg</code> (init/init_qimei/init_fingerprint/…)</td>
+<td>Device/fingerprint report.</td>
+<td>inline <code>reportDeviceEvent</code></td>
+</tr>
+<tr>
+<td>30</td>
+<td>POST</td>
+<td><code>https://{reportDomain‖r.apkpure.net}/webReport</code></td>
+<td>batch event DT SDK 4.5.3-web</td>
+<td><strong>Upload event utama DT</strong>. <code>reportDomain</code> aktual = <code>beacon.cdnpure.com</code> (<code>use_datahub:true</code>, <code>use_es:true</code>, <code>h5_exp_id</code>, <code>rmd:'prod123'</code>, <code>setName:'ath-m-fjny-prod'</code>).</td>
+<td><code>dt_sdk_v1023.js</code> + <code>reportDtConfig</code></td>
+</tr>
+<tr>
+<td>31</td>
+<td>POST</td>
+<td><code>https://{reportDomain‖r.apkpure.net}/tmp</code></td>
+<td><code>{platformId, mainAppKey, appVersion, sdkVersion, …}</code></td>
+<td>Ambil konfigurasi SDK (sampling, blacklist…).</td>
+<td><code>dt_sdk_v1023.js</code> → <code>requestConfig</code></td>
+</tr>
+<tr>
+<td>32</td>
+<td>POST (sendBeacon)</td>
+<td><code>https://svibeacon.onezapp.com/analytics/v2_upload</code></td>
+<td>batch event (URL hasil replace <code>/webReport</code>)</td>
+<td>Jalur DataHub saat <code>use_datahub:true</code>; jalur ES via sendBeacon ke <code>/webReport</code> saat <code>use_es:true</code>.</td>
+<td><code>dt_sdk_v1023.js</code> → <code>onSendBeacon</code></td>
+</tr>
+<tr>
+<td>33</td>
+<td>GET</td>
+<td><code>https://r.apkpure.net/report?project=DT_ERROR&amp;url=…&amp;refer=…&amp;os=…&amp;wpid=…&amp;msg=…</code></td>
+<td>error JS + stack</td>
+<td>Error log DT.</td>
+<td><code>dt_report_home.js</code></td>
+</tr>
+<tr>
+<td>34</td>
+<td>GET + POST</td>
+<td><code>https://r.cdnpure.com/report?project=ru_speed&amp;type=cf_bottom&amp;host=…</code> (Image) dan <code>POST https://r-eo.apkpure.net/report?project=ru_speed</code> <code>{type:'eo_bottom',url,host}</code></td>
+<td>—</td>
+<td>Speed report Rusia/CDN, sampling 30% (<code>Math.random()&lt;0.3</code>, <code>window.yaContextCb</code>).</td>
+<td>inline home &amp; submit</td>
+</tr>
+<tr>
+<td>35</td>
+<td>✅ GET (jsonp)</td>
+<td><code>https://a.apkpure.com/api-shares.json?url={canonical}&amp;callback=…</code></td>
+<td><code>url</code> (canonical page)</td>
+<td>Share counter → render <code>.share-counter</code> + <code>SHARES</code>. Tes → <code>{"shares":""}</code>.</td>
+<td>inline share-button</td>
+</tr>
+<tr>
+<td>36</td>
+<td>✅ GET→POST</td>
+<td><code>https://tapi.pureapk.com/v3/report_token?h5_qimei=…&amp;token=…&amp;lang=en&amp;uid=…&amp;account_type=1&amp;domain=…&amp;zone=…</code> + header <code>Ual-Access-Businessid: projecta</code></td>
+<td>FCM token (hanya jika <code>Notification.permission==="granted"</code>)</td>
+<td>Upload push token; Firebase project <code>apkpure-web-firebase</code> (apiKey <code>AIzaSyDGl5…</code>, sender <code>708547724301</code>, vapid <code>BBGaVC7…</code> — public web key). Token disimpan di <code>localStorage</code> (<code>apkpure-firebase-token</code>, <code>apkpure-last-upload-token-time</code>).</td>
+<td>inline <code>uploadToken()/getAndUploadToken()</code></td>
+</tr>
+<tr>
+<td>37</td>
+<td>—</td>
+<td>Google stack</td>
+<td>—</td>
+<td>gtag <code>UA-61066224-5</code> (home) / <code>G-NT1VQC8HKJ</code> (submit), AdSense <code>ca-pub-6510778225276763</code>, Taboola, Pushbullet <code>gtag event</code>.</td>
+<td><code>&lt;script&gt;</code> tags + <code>global_v1285.min.js</code></td>
+</tr>
+</tbody>
+</table>
+<h3>2.7 Static asset, i18n, PWA &amp; misc — base <code>https://m.apkpure.com</code> kecuali disebut</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Keterangan</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>38</td>
+<td>GET</td>
+<td><code>/language_v1034.js?hl={lang}</code></td>
+<td>Kamus <code>$$lang</code> (UPLOAD-<em>, SIGN_VERIFY-</em>, REGION_DOWN-<em>, USER-</em>, COMMENT-*) + <code>$$x_ll='/id'</code>, <code>$$x_ll_root='/id/'</code>.</td>
+</tr>
+<tr>
+<td>39</td>
+<td>GET</td>
+<td><code>https://i.apkpure.com/user_v1002.js?hl=id&amp;mobile=1&amp;r={rand}</code></td>
+<td>State user <code>$$_$$.user</code> + <code>setNavUserInfo()</code> (guest → link <code>/id/login</code>).</td>
+</tr>
+<tr>
+<td>40</td>
+<td>GET</td>
+<td><code>//a.apkpures.xyz/analytics_v1025.js</code>, <code>dt_sdk_v1023.js</code>, <code>dt_report_s_v1239.js?page={page_home_common‖page_category_ranking}</code></td>
+<td>Analytics &amp; DT SDK; <strong>submit-apk memakai modul <code>page_category_ranking</code></strong> (bukan <code>page_submit</code>), homepage memakai <code>page_home_common</code>.</td>
+</tr>
+<tr>
+<td>41</td>
+<td>GET</td>
+<td><code>https://static.apkpures.xyz/mobile/static/js/global_v1285.min.js</code> (+<code>jquery.3.6.0</code>, <code>lazyload-11.0.6</code>, <code>touchslide.fix.v2</code>)</td>
+<td>Core logic mobile web (semua <code>init*</code> di atas).</td>
+</tr>
+<tr>
+<td>42</td>
+<td>GET</td>
+<td><code>https://static.apkpures.xyz/www/static/js/search_v1011.min.js</code>, <code>…/script/typeahead.bundle.fix.v2.min.js</code></td>
+<td>Search suggest (Bloodhound + typeahead).</td>
+</tr>
+<tr>
+<td>43</td>
+<td>GET</td>
+<td><code>https://static.apkpures.xyz/www/static/script/jquery.{ui.widget,fileupload,fileupload-process,fileupload-validate}.js</code></td>
+<td><strong>Hanya di submit-apk</strong> — mesin chunked upload.</td>
+</tr>
+<tr>
+<td>44</td>
+<td>GET</td>
+<td><code>https://apkpure.com/static-2/assets/js/device-1.2.49-min.js</code></td>
+<td>Library device-fingerprint <strong>ter-obfuscasi</strong> (±954 KB); endpoint pastinya hanya terlihat saat runtime.</td>
+</tr>
+<tr>
+<td>45</td>
+<td>GET</td>
+<td><code>/sw_v3.js</code></td>
+<td>Service Worker (<code>navigator.serviceWorker.register("/sw_v3.js")</code>).</td>
+</tr>
+<tr>
+<td>46</td>
+<td>GET</td>
+<td><code>/manifest_v11.json</code></td>
+<td>PWA manifest (<code>start_url: "/?utm_source=pwa…"</code>, icon <code>image.winudf.com/.../pwa_icon.png</code>).</td>
+</tr>
+<tr>
+<td>47</td>
+<td>GET</td>
+<td><code>/robots.txt</code></td>
+<td><code>Disallow: /url?q=</code>, <code>/u/</code>, <code>/users/</code>, <code>*?*ajax=1*</code>, <code>need-update.html</code>, <code>report-content.html</code> (× semua locale). Sitemap: <code>https://apkpure.com/sitemap.xml</code>.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>3. Route internal (mobile, locale <code>id</code>)</h2>
+<p>Ditemukan dari <code>href</code> di homepage (pola berlaku untuk semua locale: ganti <code>/id</code> dengan <code>/</code>, <code>/br</code>, <code>/es</code>, …):</p>
+<p><strong>Hub &amp; listing</strong></p>
+<table>
+<thead>
+<tr>
+<th>Route</th>
+<th>Keterangan</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/id/</code></td>
+<td>Homepage (yang di-scrape)</td>
+</tr>
+<tr>
+<td><code>/id/game</code>, <code>/id/app</code></td>
+<td>Hub game &amp; aplikasi</td>
+</tr>
+<tr>
+<td><code>/id/discover</code></td>
+<td>Discover ("Menemukan")</td>
+</tr>
+<tr>
+<td><code>/id/pre-register</code></td>
+<td>Pre-registrasi</td>
+</tr>
+<tr>
+<td><code>/id/game-24h</code>, <code>/id/app-24h</code></td>
+<td>Populer 24 jam</td>
+</tr>
+<tr>
+<td><code>/id/editor-choice</code></td>
+<td>Pilihan editor</td>
+</tr>
+<tr>
+<td><code>/id/game-sales</code></td>
+<td>Obral game</td>
+</tr>
+<tr>
+<td><code>/id/topic/top-new-games</code>, <code>/id/topic/top-new-apps</code></td>
+<td>Topik</td>
+</tr>
+<tr>
+<td><code>/id/partner-developers-apps-on-apkpure</code></td>
+<td>Partner developer</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Detail &amp; aksi</strong></p>
+<table>
+<thead>
+<tr>
+<th>Pola route</th>
+<th>Contoh</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/id/{slug}/{package}</code></td>
+<td><code>/id/whatsapp-android/com.whatsapp</code></td>
+</tr>
+<tr>
+<td><code>/id/{slug}/{package}/download[/{version}]</code></td>
+<td><code>/id/apkpure/com.apkpure.aegon/download/3.20.7803</code></td>
+</tr>
+<tr>
+<td><code>/id/submit-apk</code></td>
+<td>Upload APK (yang di-scrape)</td>
+</tr>
+<tr>
+<td><code>/id/login</code>, <code>/id/users/…</code></td>
+<td>Auth &amp; user center</td>
+</tr>
+<tr>
+<td><code>/id/support</code>, <code>/id/apkpure-app.html</code></td>
+<td>Support &amp; app promo</td>
+</tr>
+<tr>
+<td><code>/id/about.html</code>, <code>/contact-us.html</code>, <code>/cooperation.html</code>, <code>/privacy-policy.html</code>, <code>/copyright-policy.html</code>, <code>/terms.html</code>, <code>/eu-amau.html</code></td>
+<td>Halaman statis</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>4. Contoh pemakaian (curl)</h2>
+<pre><code class="language-bash"># 1. Search suggestion ( Andy )
+curl -A &quot;Mozilla/5.0 (Linux; Android 10; K) ... Chrome/120.0 Mobile Safari/537.36&quot; \
+  &quot;https://m.apkpure.com/id/api/v1/search_suggestion_new?key=minecraft&amp;limit=3&quot;
+
+# 2. Rekomendasi update (butuh cookie login; tanpa login -&gt; error -1)
+curl -b &quot;cookies.txt&quot; &quot;https://m.apkpure.com/id/api/v2/app-update-recommend&quot;
+
+# 3. Changelog versi (POST form)
+curl -X POST &quot;https://m.apkpure.com/api/www/command-version_more&quot; \
+  --data &quot;package=com.whatsapp&amp;vid=&lt;VID&gt;&amp;lang=id&quot;
+
+# 4. Share counter (jsonp)
+curl &quot;https://a.apkpure.com/api-shares.json?url=https%3A%2F%2Fm.apkpure.com%2Fid%2F&quot;
+
+# 5. Email auth (butuh cookie login di i.apkpure.com)
+curl -X POST -b &quot;cookies.txt&quot; &quot;https://i.apkpure.com/account/api/v2/user_email_auth&quot;
+
+# 6. Load-more listing (pola)
+curl &quot;https://m.apkpure.com/id/game-24h?ajax=1&amp;page=2&quot;
+
+# 7. Probe endpoint upload (GET aman, tanpa file)
+curl &quot;https://developer.apkpure.com/api/v1/user_upload/apk&quot;
+# -&gt; {&quot;commands&quot;:{&quot;statusCode&quot;:&quot;INCORRECT_PKG&quot;,...}}
+</code></pre>
+<hr />
+<h2>5. Catatan &amp; batasan scrape</h2>
+<ol>
+<li><strong>Halaman login terproteksi Cloudflare</strong> (<code>Just a moment...</code>) untuk request curl polos, jadi <code>action</code> form login/register/reset tidak bisa dibaca statis — polanya didokumentasikan dari <code>global_v1285.min.js</code> (<code>initLoginRegister</code>, <code>#cmt-login-form</code>, <code>#cmt-register-form</code>, <code>window.popupResult</code>).</li>
+<li><strong><code>device-1.2.49-min.js</code> ter-obfuscasi</strong> (string di-XOR/base64) — endpoint pastinya hanya bisa dilihat via DevTools runtime (Network tab), kemungkinan besar mengarah ke <code>r.cdnpure.com</code> / <code>beacon.cdnpure.com</code>.</li>
+<li><strong>Submit-apk memakai modul DT <code>page_category_ranking</code></strong> (bukan modul khusus submit) — terlihat dari <code>dt_report_s_v1239.js?page=page_category_ranking</code>.</li>
+<li><strong>Form search mobile mengarah ke domain desktop</strong> (<code>https://apkpure.com/id/search</code>), sedangkan suggest API tetap di <code>m.apkpure.com</code>.</li>
+<li>Firebase <code>apiKey</code>/<code>vapidKey</code> di §2.6 #36 adalah <strong>public web key</strong> (normal untuk FCM Web) — bukan kredensial rahasia.</li>
+<li>Semua klaim "✅ terverifikasi" diuji dengan respons HTTP 200 pada 12 Sep 2026; beberapa endpoint butuh cookie login (<code>user_email_auth</code>, <code>app-update-recommend</code>, upload) sehingga respons guest berupa JSON error — itu justru membuktikan endpoint-nya hidup.</li>
+</ol>
+<hr />
+<h2>6. Update — Scrape ulang halaman download (12 Sep 2026)</h2>
+<p>Sumber: <code>https://m.apkpure.com/id/tiktok-app/com.zhiliaoapp.musically/download</code> (HTTP 200, 412 KB).</p>
+<h3>Base URL baru</h3>
+<table>
+<thead>
+<tr>
+<th>Base URL</th>
+<th>Fungsi</th>
+<th>Bukti</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>https://d.apkpure.com</code></td>
+<td><strong>Direct file link</strong> (<code>/b/APK/...</code>, <code>/b/XAPK/...</code>, <code>/custom/...</code>)</td>
+<td><code>href</code> tombol <code>#download_link</code></td>
+</tr>
+<tr>
+<td><code>https://data.winudf.com</code></td>
+<td>CDN file final (redirect 302 + token waktu, tidak bisa di-hotlink mentah)</td>
+<td>header <code>location:</code> hasil test</td>
+</tr>
+</tbody>
+</table>
+<h3>Pola direct download (terverifikasi)</h3>
+<pre><code>https://d.apkpure.com/b/APK/{package}?version=latest
+https://d.apkpure.com/b/APK/{package}?versionCode={vc}&amp;nc={abi}&amp;sv={sdk}
+https://d.apkpure.com/b/XAPK/{package}?versionCode={vc}&amp;nc={abi}&amp;sv={sdk}
+</code></pre>
+<p>Contoh nyata: <code>https://d.apkpure.com/b/APK/com.zhiliaoapp.musically?version=latest</code>
+→ 302 → <code>https://data.winudf.com/APK/Y29tLnpoaWxpYW9hcHA...?filename=TikTok...apk&amp;full_size=465162398&amp;token=...</code></p>
+<p>Test: request curl polos → 403 Cloudflare; request dengan UA browser + referer
+→ 302 ke file. Kesimpulan: pola ini <strong>jalan di browser asli</strong> (dipakai tombol
+<code>#download_link</code> "Jika unduhan tidak dimulai..." milik APKPure sendiri).</p></div>
+<p style="text-align:center;margin-bottom:30px"><a href="/">← Kembali ke Beranda</a></p></main>
+</body>
+</html>

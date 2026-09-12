@@ -1,0 +1,19 @@
+# TiyanPure — URL cantik untuk hosting Apache/cPanel/Shared hosting
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  # Halaman detail aplikasi: /d/nama.paket -> apk.html?pkg=nama.paket
+  RewriteRule ^d/([^/]+)/?$ apk.html?pkg=$1 [L,QSA]
+  RewriteRule ^dl/([^/]+)/?$ dl.html?pkg=$1 [L,QSA]
+  # Halaman listing: /game /app /discover ... -> list.html?type=...
+  RewriteRule ^(game|app|discover|pre-register|game-24h|app-24h|editor-choice|game-sales|partner-developers)/?$ list.html?type=$1 [L,QSA]
+  # Halaman topik: /topic/slug -> list.html?type=topic&topic=slug
+  RewriteRule ^topic/([^/]+)/?$ list.html?type=topic&topic=$1 [L,QSA]
+</IfModule>
+
+# Cache ikon 1 tahun (file sudah versioned by design)
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType image/png "access plus 1 year"
+  ExpiresByType image/jpeg "access plus 1 year"
+  ExpiresByType image/x-icon "access plus 1 year"
+</IfModule>
